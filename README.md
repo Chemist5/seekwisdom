@@ -1,17 +1,17 @@
 # Seek Wisdom
 
-Advice Worth Following. A clean static site for the Seek Wisdom morning-habit brand.
+Advice Worth Following. A static preview for a weekday morning email.
 
 This is a **preview**. The live WordPress site on Bluehost stays put. No DNS changes.
 
 ## What’s here
 
-- Home with the hero, weekday-email idea, and a signup placeholder
-- Posts index plus 32 migrated WordPress posts (same slugs)
-- Honest About page (one person, no fake team, no fake address)
+- Home: one promise, email signup, then three latest notes
+- Notes index plus 32 migrated WordPress posts (same slugs)
+- Brand page (`/about/`): what this is — no personal bio
 - `sitemap.xml`, `robots.txt`, and Vercel clean URLs
 
-Featured images still hotlink from `seekwisdom.co` for now. Beehiiv is next; the email form is a preview-only placeholder.
+Featured images still hotlink from `seekwisdom.co` for now. The email form is a preview placeholder until Beehiiv.
 
 ## Local
 
@@ -24,12 +24,6 @@ That writes static files to `public/`. Open `public/index.html` or serve the fol
 ## Deploy
 
 Vercel builds with `npm run build` and publishes `public/`. Preview only — do not point `seekwisdom.co` here until someone says yes.
-
-Preview (PR branch, SSO-protected):
-https://seekwisdom-1xi05dnjx-chemist5s-projects.vercel.app
-
-Branch alias:
-https://seekwisdom-git-cursor-seek-wisdom-sta-ee419d-chemist5s-projects.vercel.app
 
 ## Content
 

@@ -109,17 +109,17 @@ function signup(compact = false) {
   const fieldId = `email-${signupCount}`;
   return `
     <form class="signup" data-signup>
-      <p class="sr-only">Email signup. Beehiiv comes later.</p>
+      <p class="sr-only">Email signup. The live list comes later.</p>
       <div class="signup-row">
         <label class="sr-only" for="${fieldId}">Email</label>
-        <input id="${fieldId}" name="email" type="email" autocomplete="email" placeholder="you@email.com" required>
-        <button type="submit">Get the notes</button>
+        <input id="${fieldId}" name="email" type="email" autocomplete="email" placeholder="Email address" required>
+        <button type="submit">Get the note</button>
       </div>
-      <p class="signup-note">${
+      ${
         compact
-          ? "Weekday mornings. Free. The real list is next."
-          : "A short weekday email. Free. Beehiiv signup comes next — this is a preview."
-      }</p>
+          ? `<p class="signup-note">Weekday mornings. Free.</p>`
+          : ""
+      }
     </form>
   `;
 }
@@ -148,7 +148,7 @@ function layout({
   <link rel="icon" href="/assets/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/styles.css">
   ${extraHead}
 </head>
@@ -157,15 +157,12 @@ function layout({
     <div class="wrap header-inner">
       <a class="brand" href="/">
         <img src="/assets/logo.png" alt="" width="80" height="80">
-        <span class="brand-text">
-          <span class="brand-name">${siteName}</span>
-          <span class="brand-tag">${tagline}</span>
-        </span>
+        <span class="brand-name">${siteName}</span>
       </a>
       <nav class="nav" aria-label="Primary">
         <a href="/"${current === "home" ? ' aria-current="page"' : ""}>Home</a>
-        <a href="/posts/"${current === "posts" ? ' aria-current="page"' : ""}>Posts</a>
-        <a href="/about/"${current === "about" ? ' aria-current="page"' : ""}>About</a>
+        <a href="/posts/"${current === "posts" ? ' aria-current="page"' : ""}>Notes</a>
+        <a href="/about/"${current === "about" ? ' aria-current="page"' : ""}>What this is</a>
       </nav>
     </div>
   </header>
@@ -177,7 +174,7 @@ function layout({
           <img src="/assets/logo.png" alt="" width="64" height="64">
           <strong>${siteName}</strong>
         </div>
-        <p class="fine-print">${tagline}. One person. Plain words. No fake office. No fake team.</p>
+        <p class="fine-print">A short weekday morning email.</p>
       </div>
       ${signup(true)}
     </div>
@@ -188,20 +185,16 @@ function layout({
 `;
 }
 
-function card(post) {
+function card(post, compact = false) {
   const image = post.featured_image
     ? `<div class="card-image"><img src="${escapeHtml(post.featured_image)}" alt="" loading="lazy" onerror="this.classList.add('is-missing')"></div>`
     : "";
-  const category = post.categories?.[0]
-    ? `<span class="pill">${escapeHtml(post.categories[0])}</span>`
-    : "";
   return `
-    <a class="card" href="/${encodeURI(post.slug)}/">
+    <a class="card${compact ? " compact" : ""}" href="/${encodeURI(post.slug)}/">
       ${image}
       <div class="card-body">
-        <div class="meta">${category}<time datetime="${escapeHtml(post.date)}">${formatDate(post.date)}</time></div>
-        <h3>${escapeHtml(post.title)}</h3>
-        <p>${escapeHtml(excerptFor(post))}</p>
+        <div class="meta"><time datetime="${escapeHtml(post.date)}">${formatDate(post.date)}</time></div>
+        <h3>${escapeHtml(post.title)}</h3>${compact ? "" : `\n        <p>${escapeHtml(excerptFor(post, 110))}</p>`}
       </div>
     </a>
   `;
@@ -214,26 +207,28 @@ write(
   layout({
     title: siteName,
     description:
-      "A short weekday email with one useful idea — before your day gets loud.",
+      "Seek Wisdom is a short weekday morning email. Advice worth following.",
     path: "/",
     current: "home",
     content: `
       <main>
         <section class="hero">
           <div class="wrap hero-copy">
+            <p class="eyebrow">Seek Wisdom</p>
             <h1>Advice worth following.</h1>
-            <p>A short weekday email with one useful idea — before your day gets loud.</p>
+            <p class="lede">A short note in your inbox each weekday morning.</p>
             ${signup()}
+            <p class="kicker">Free. Easy to read. One idea a day.</p>
           </div>
         </section>
-        <section class="section">
-          <div class="wrap">
+        <section class="notes">
+          <div class="wrap notes-inner">
             <div class="section-head">
-              <h2>Latest posts</h2>
-              <a href="/posts/">See all ${latest.length}</a>
+              <h2>Latest notes</h2>
+              <a href="/posts/">See all notes</a>
             </div>
             <div class="cards">
-              ${latest.slice(0, 6).map(card).join("")}
+              ${latest.slice(0, 3).map((post) => card(post, true)).join("")}
             </div>
           </div>
         </section>
@@ -245,17 +240,17 @@ write(
 write(
   "posts/index.html",
   layout({
-    title: "Posts",
-    description: "All Seek Wisdom posts, kept from the old site with the same slugs.",
+    title: "Notes",
+    description: "Past Seek Wisdom notes. The weekday email is the main thing.",
     path: "/posts/",
     current: "posts",
     content: `
       <main class="page">
         <div class="wrap">
-          <h1 class="page-title">All posts</h1>
-          <p class="page-lead">${latest.length} notes on rest, writing, money stress, and getting through the day.</p>
-          <div class="cards" style="margin-top:1.4rem">
-            ${latest.map(card).join("")}
+          <h1 class="page-title">Notes</h1>
+          <p class="page-lead">Extra reading. The weekday email is the main thing.</p>
+          <div class="cards catalog" style="margin-top:1.6rem">
+            ${latest.map((post) => card(post)).join("")}
           </div>
         </div>
       </main>
@@ -266,19 +261,19 @@ write(
 write(
   "about/index.html",
   layout({
-    title: "About",
-    description: "Seek Wisdom is a one-person brand. Short advice. No fake team.",
+    title: "What this is",
+    description:
+      "Seek Wisdom sends short, clear advice for people who want a calmer, clearer morning.",
     path: "/about/",
     current: "about",
     content: `
-      <main class="page">
-        <div class="wrap prose">
-          <h1 class="page-title">One person. Plain advice.</h1>
-          <div class="about-block">
-            <p>Seek Wisdom is me. I’m Jaime.</p>
-            <p>I write short notes I want to follow myself. There is no team of experts. There is no office in Massachusetts. There is just a morning habit: one useful idea before the day gets loud.</p>
-            <p>If you like calm words more than hype, you’re in the right place. The email is the main thing. The posts here are the library.</p>
-          </div>
+      <main class="page about-page">
+        <div class="wrap about-copy">
+          <p class="eyebrow">Seek Wisdom</p>
+          <h1 class="page-title">What this is</h1>
+          <p class="mission">Seek Wisdom sends short, clear advice for people who want a calmer, clearer morning.</p>
+          <p>One idea. Easy words. Worth following.</p>
+          <p>The email is the product. These notes are extra reading.</p>
         </div>
       </main>
     `,
@@ -331,7 +326,7 @@ for (const post of latest) {
             <div class="post-content">
               ${cleanContent(post.content_html)}
             </div>
-            <p class="page-lead" style="margin-top:2rem"><a href="/posts/">← All posts</a></p>
+            <p class="page-lead" style="margin-top:2.4rem"><a href="/posts/">All notes</a></p>
           </article>
         </main>
       `,

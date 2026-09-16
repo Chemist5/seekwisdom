@@ -4,7 +4,7 @@
     form.addEventListener("submit", function (event) {
       event.preventDefault();
       form.innerHTML =
-        '<p class="signup-thanks">Thanks. The real list is not live yet — this is a preview. Beehiiv comes next.</p>';
+        '<p class="signup-thanks">You’re in. The live list is next — this is still a preview.</p>';
     });
   });
 })();
