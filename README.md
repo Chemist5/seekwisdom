@@ -25,6 +25,12 @@ That writes static files to `public/`. Open `public/index.html` or serve the fol
 
 Vercel builds with `npm run build` and publishes `public/`. Preview only — do not point `seekwisdom.co` here until someone says yes.
 
+Preview (PR branch, SSO-protected):
+https://seekwisdom-1xi05dnjx-chemist5s-projects.vercel.app
+
+Branch alias:
+https://seekwisdom-git-cursor-seek-wisdom-sta-ee419d-chemist5s-projects.vercel.app
+
 ## Content
 
 WordPress export lives in `content/posts.json`. Re-run the build after you change it.
