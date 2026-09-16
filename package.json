@@ -1,0 +1,11 @@
+{
+  "name": "seekwisdom",
+  "private": true,
+  "description": "Seek Wisdom — Advice Worth Following. Static site.",
+  "scripts": {
+    "build": "node scripts/build.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
